@@ -105,10 +105,7 @@ class TestPackageTypeSurcharges(unittest.TestCase):
 class TestExpressDelivery(unittest.TestCase):
 
     def test_express_should_be_more_expensive_not_cheaper(self):
-        """
-        Бизнес-требование: экспресс-доставка должна стоить дороже обычной.
-        Текущий код умножает на 0.5 — это баг.
-        """
+
         normal, _ = calculate_delivery_cost(1.0, 100, "обычный", is_express=False)
         express, _ = calculate_delivery_cost(1.0, 100, "обычный", is_express=True)
         self.assertGreater(express, normal)

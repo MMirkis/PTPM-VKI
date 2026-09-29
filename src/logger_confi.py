@@ -3,7 +3,7 @@ import sys
 import os
 import hashlib
 
-# Создаём папку Logs, если её нет
+
 os.makedirs("../Logs", exist_ok=True)
 
 log_format = "%(asctime)s | [%(levelname)-8s] | %(name)s | %(message)s"

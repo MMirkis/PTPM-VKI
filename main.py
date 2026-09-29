@@ -6,11 +6,7 @@ from src.validator import validate_credentials
 
 
 def input_password(prompt: str = "Пароль: ", show_stars: bool = True) -> str:
-    """
-    Ввод пароля с маскировкой.
-    show_stars=True  — отображает звёздочки (для пароля).
-    show_stars=False — не отображает ничего (для подтверждения).
-    """
+
     logger.debug(f"Запрошен ввод пароля: prompt='{prompt}', show_stars={show_stars}")
 
     if not sys.stdin.isatty():
