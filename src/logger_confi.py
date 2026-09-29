@@ -4,7 +4,7 @@ import os
 import hashlib
 
 # Создаём папку Logs, если её нет
-os.makedirs("Logs", exist_ok=True)
+os.makedirs("../Logs", exist_ok=True)
 
 log_format = "%(asctime)s | [%(levelname)-8s] | %(name)s | %(message)s"
 date_format = "%Y-%m-%d %H:%M:%S"
@@ -15,7 +15,7 @@ logging.basicConfig(
     datefmt=date_format,
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler("Logs/file_txt.log", encoding="utf-8"),
+        logging.FileHandler("../Logs/file_txt.log", encoding="utf-8"),
     ],
 )
 

@@ -1,9 +1,8 @@
-import logging
 import sys
 from datetime import datetime
 
-from logger_confi import logger, safe_params
-from validator import validate_credentials
+from src.logger_confi import logger, safe_params
+from src.validator import validate_credentials
 
 
 def input_password(prompt: str = "Пароль: ", show_stars: bool = True) -> str:
