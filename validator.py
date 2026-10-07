@@ -3,11 +3,9 @@ import logging
 
 logger = logging.getLogger("registration.validator")
 
-BLACKLIST = {
-    "admin", "root", "user", "test", "guest",
+BLACKLIST = ["admin", "root", "user", "test", "guest",
     "administrator", "superuser", "moderator",
-    "support", "system",
-}
+    "support", "system"]
 
 PHONE_RE = re.compile(r"^\+\d-\d{3}-\d{3}-\d{4}$")
 EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
@@ -49,13 +47,16 @@ def validate_login(login: str) -> tuple[bool, str]:
             )
         normalized = login
 
-    # Проверка чёрного списка
-    if normalized.lower() in BLACKLIST:
-        logger.warning(f"Валидация логина провалена: '{normalized}' в чёрном списке")
-        return False, "Логин находится в чёрном списке запрещённых"
-
-    logger.debug(f"Логин '{normalized}' успешно прошёл валидацию")
-    return True, ""
+    # Проверка чёрного списка (как подстрока)
+    login_lower = normalized.lower()
+    for restricted_word in BLACKLIST:
+        if restricted_word in login_lower:
+            logger.warning(
+                f"Валидация логина провалена: найден запрещённый фрагмент "
+                f"'{restricted_word}' в логине '{normalized}'"
+            )
+            return False,"логин не успешен"
+        else: return True,"логин успешен"
 
 
 def validate_password(password: str, confirm: str) -> tuple[bool, str]:

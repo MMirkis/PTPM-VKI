@@ -105,70 +105,73 @@ def main():
     confirm = ""
     request_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    try:
-        logger.debug("Запрос логина у пользователя")
-        login = input("Логин: ")
-        logger.debug(f"Получен логин: '{login}' (длина={len(login)})")
+    while True:
+        try:
+            logger.debug("Запрос логина у пользователя")
+            login = input("Логин: ")
+            if login =="q":
+                break
+            logger.debug(f"Получен логин: '{login}' (длина={len(login)})")
 
-        logger.debug("Запрос пароля у пользователя (с маскировкой звёздочками)")
-        password = input_password("Пароль: ", show_stars=True)
-        logger.debug(f"Пароль получен, длина={len(password)}")
+            logger.debug("Запрос пароля у пользователя (с маскировкой звёздочками)")
+            password = input_password("Пароль: ", show_stars=True)
+            logger.debug(f"Пароль получен, длина={len(password)}")
 
-        logger.debug("Запрос подтверждения пароля (без отображения символов)")
-        confirm = input_password("Подтверждение пароля: ", show_stars=False)
-        logger.debug(f"Подтверждение получено, длина={len(confirm)}")
+            logger.debug("Запрос подтверждения пароля (без отображения символов)")
+            confirm = input_password("Подтверждение пароля: ", show_stars=False)
+            logger.debug(f"Подтверждение получено, длина={len(confirm)}")
 
-
-        logger.info(
-            f"Обработка запроса регистрации | time={request_time} | "
-            f"params={safe_params(login, password, confirm)}"
-        )
-
-        success, message = validate_credentials(login, password, confirm)
-
-        if success:
 
             logger.info(
-                f"Успешный запрос | time={request_time} | "
-                f"params={safe_params(login, password, confirm)} | "
-                f"result=True | message=''"
+                f"Обработка запроса регистрации | time={request_time} | "
+                f"params={safe_params(login, password, confirm)}"
             )
-            print("True")
-            print("")
-        else:
 
-            logger.warning(
-                f"Неуспешный запрос | time={request_time} | "
-                f"params={safe_params(login, password, confirm)} | "
-                f"result=False | error='{message}'"
+            success, message = validate_credentials(login, password, confirm)
+
+            if success:
+
+                logger.info(
+                    f"Успешный запрос | time={request_time} | "
+                    f"params={safe_params(login, password, confirm)} | "
+                    f"result=True | message=''"
+                )
+                print("True")
+                print("")
+            else:
+
+                logger.warning(
+                    f"Неуспешный запрос | time={request_time} | "
+                    f"params={safe_params(login, password, confirm)} | "
+                    f"result=False | error='{message}'"
+                )
+                print("False")
+                print(message)
+
+        except KeyboardInterrupt:
+
+            logger.critical(
+                f"Критическое событие: работа программы прервана пользователем (Ctrl+C) | "
+                f"time={request_time}"
             )
             print("False")
-            print(message)
+            print("Работа программы прервана пользователем")
+            sys.exit(130)
 
-    except KeyboardInterrupt:
+        except Exception as ex:
 
-        logger.critical(
-            f"Критическое событие: работа программы прервана пользователем (Ctrl+C) | "
-            f"time={request_time}"
-        )
-        print("False")
-        print("Работа программы прервана пользователем")
-        sys.exit(130)
+            logger.error(
+                f"Неуспешный запрос | time={request_time} | "
+                f"params={safe_params(login, password, confirm)} | "
+                f"error='{ex}'"
+            )
+            logger.exception("Заход в блок обработки исключения:")
+            print("False")
+            print(f"Внутренняя ошибка: {ex}")
 
-    except Exception as ex:
-
-        logger.error(
-            f"Неуспешный запрос | time={request_time} | "
-            f"params={safe_params(login, password, confirm)} | "
-            f"error='{ex}'"
-        )
-        logger.exception("Заход в блок обработки исключения:")
-        print("False")
-        print(f"Внутренняя ошибка: {ex}")
-
-    finally:
-        logger.info("Приложение завершило работу")
-        logger.info("=" * 60)
+        finally:
+            logger.info("Приложение завершило работу")
+            logger.info("=" * 60)
 
 
 if __name__ == "__main__":
